@@ -3,72 +3,75 @@ import simbad.sim.*;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-
 /**
  Derivate your own code from this example.
  */
-
 
 public class example {
 
 
     /** Describe the robot */
-    static public class KheperaRobot extends Agent
+
+    static public class Robot extends KheperaRobot
     {
-        RangeSensorBelt sonars;
-        CameraSensor camera;
-        public KheperaRobot(Vector3d position, String name)
+        public Robot(Vector3d position, String name)
         {
             super(position, name);
-            camera = RobotFactory.addCameraSensor(this);
-            sonars = RobotFactory.addSonarBeltSensor(this);
-        }
-        public void setWheelsVelocity(double left, double right)
-        {
+            this.height = 0.5F;
+            this.radius = 0.3F;
+            this.mass = 50.0F;
+
 
         }
+
         public void initBehavior()
         {
 
         }
+
         public void performBehavior()
         {
-
+            this.setWheelsVelocity(0.1, 0.1);
+            if ((getCounter() % 100) == 0) {
+                if (this.collisionDetected()) {
+                    this.setWheelsVelocity(-0.01, 0.01);
+                }
+            }
         }
     }
-    static public class Robot extends Agent {
-
-        RangeSensorBelt sonars;
-        CameraSensor camera;
-
-        public Robot(Vector3d position, String name) {
-            super(position, name);
-            // Add camera
-            camera = RobotFactory.addCameraSensor(this);
-            // Add sonars
-            sonars = RobotFactory.addSonarBeltSensor(this);
-        }
-
-        /** This method is called by the simulator engine on reset. */
-        public void initBehavior() {
-            // nothing particular in this case
-        }
-
-        /** This method is call cyclically (20 times per second)  by the simulator engine. */
-        public void performBehavior() {
-
-            // progress at 0.5 m/s
-            setTranslationalVelocity(0.5);
-            // frequently change orientation
-            if ((getCounter() % 100) == 0)
-                setRotationalVelocity(Math.PI / 2 * (0.5 - Math.random()));
-//                setRotationalVelocity(0.5);
-            // print front sonar every 100 frames
-            if (getCounter() % 100 == 0)
-                System.out.println("Sonar num 0  = " + sonars.getMeasurement(0));
-
-        }
-    }
+//    static public class Robot extends Agent {
+//
+//        RangeSensorBelt sonars;
+//        CameraSensor camera;
+//
+//        public Robot(Vector3d position, String name) {
+//            super(position, name);
+//            // Add camera
+//            camera = RobotFactory.addCameraSensor(this);
+//            // Add sonars
+//            sonars = RobotFactory.addSonarBeltSensor(this);
+//        }
+//
+//        /** This method is called by the simulator engine on reset. */
+//        public void initBehavior() {
+//            // nothing particular in this case
+//        }
+//
+//        /** This method is call cyclically (20 times per second)  by the simulator engine. */
+//        public void performBehavior() {
+//
+//            // progress at 0.5 m/s
+//            setTranslationalVelocity(0.5);
+//            // frequently change orientation
+//            if ((getCounter() % 100) == 0)
+//                setRotationalVelocity(Math.PI / 2 * (0.5 - Math.random()));
+////                setRotationalVelocity(0.5);
+//            // print front sonar every 100 frames
+//            if (getCounter() % 100 == 0)
+//                System.out.println("Sonar num 0  = " + sonars.getMeasurement(0));
+//
+//        }
+//    }
 
     /** Describe the environement */
     static public class MyEnv extends EnvironmentDescription {
@@ -88,11 +91,11 @@ public class example {
             Box b1 = new Box(new Vector3d(-3, 0, -3), new Vector3f(1, 1, 1),
                     this);
             add(b1);
+
             add(new Arch(new Vector3d(3, 0, -3), this));
+
 //            add(new Robot(new Vector3d(0, 0, 0), "robot 1"));
-            KheperaRobot robert = new KheperaRobot(new Vector3d(0, 0, 0), "robert");
-            robert.setWheelsVelocity(0.1, 0.5);
-            add(robert);
+            add(new Robot(new Vector3d(0, 0, 0), "Robert"));
         }
     }
 

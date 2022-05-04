@@ -1,5 +1,7 @@
 import simbad.gui.Simbad;
 import simbad.sim.*;
+
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
@@ -13,11 +15,20 @@ public class robert
         }
         public void initBehavior()
         {
-
         }
         public void performBehavior()
         {
+            /*Go, Robert!*/
+            if (collisionDetected())
+            {
+                this.setWheelsVelocity(-0.01, 0.01);
+            }
+            else
+            {
+                this.setWheelsVelocity(0.5, 0.5);
+//                this.getCoords(this.);
 
+            }
         }
     }
 
@@ -41,7 +52,12 @@ public class robert
             w4.rotate90(1);
             add(w4);
 
+            this.add(new Box(new Vector3d(0.0, 0.0, -0.06), new Vector3f(0.1F, 0.03F, 0.055F), this));
+            this.add(new Box(new Vector3d(0.2, 0.0, 0.0), new Vector3f(0.055F, 0.1F, 0.055F), this));
+
+            /*Go, Robert!*/
             add(new Robot(new Vector3d(0, 0, 0), "Robert"));
+
         }
     }
 
