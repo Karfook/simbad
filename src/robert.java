@@ -1,9 +1,11 @@
 import simbad.gui.Simbad;
 import simbad.sim.*;
 
+import javax.media.j3d.Transform3D;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
+import java.text.DecimalFormat;
 
 public class robert
 {
@@ -21,13 +23,26 @@ public class robert
             /*Go, Robert!*/
             if (collisionDetected())
             {
-                this.setWheelsVelocity(-0.01, 0.01);
+                /* Basic turn when collides */
+                this.setWheelsVelocity(-1, 1);
+
             }
             else
             {
-                this.setWheelsVelocity(0.5, 0.5);
-//                this.getCoords(this.);
+                /* Usual behaviour */
+                this.setWheelsVelocity(0.01, 0.01);
+            }
 
+            if((getCounter() % 100 == 0))
+            {
+                /* Coordinates */
+                Point3d point = new Point3d(this.instantTranslation);
+                getCoords(point);
+                double x = (double) Math.round(point.getX() * 1000) / 1000;
+                double y = (double) Math.round(point.getY() * 1000) / 1000;
+                double z = (double) Math.round(point.getZ() * 1000) / 1000;
+
+                System.out.println("x: " + x + "\ny: " + y + "\nz: " + z);
             }
         }
     }
@@ -55,7 +70,6 @@ public class robert
             this.add(new Box(new Vector3d(0.0, 0.0, -0.06), new Vector3f(0.1F, 0.03F, 0.055F), this));
             this.add(new Box(new Vector3d(0.2, 0.0, 0.0), new Vector3f(0.055F, 0.1F, 0.055F), this));
 
-            /*Go, Robert!*/
             add(new Robot(new Vector3d(0, 0, 0), "Robert"));
 
         }
