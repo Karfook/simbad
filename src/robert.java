@@ -24,28 +24,31 @@ public class robert
         public Robot(Vector3d position, String name)
         {
             super(position, name);
+            /* Set starting coords at index 0 */
+            y = (double) Math.round(0.014999999664723873 * 1000) / 1000;
+            pointZ = new Point3d(0, y, 0);
+            coords[0] = pointZ;
         }
 
         private void recordCoords(Point3d point, boolean collision)
         {
             boolean c = false;
-            i = j;
 
-            for(k = 0; coords[k] != null; k++) /* Check whether coordinate exist */
-            {
-                if(coords[k].getX() == point.getX()) /* Decide axis - Horizontal */
-                {
-                    if(Math.abs(coords[k].getZ() - point.getZ()) < 0.009)
-                        c = true;
-                }
-                else if(coords[k].getZ() == point.getZ()) /* Decide axis - Vertical */
-                {
-                    if(Math.abs(coords[k].getX() - point.getX()) < 0.009)
-                        c = true;
-                }
-            }
+//            for(k = 0; coords[k] != null; k++) /* Check whether coordinate exist */
+//            {
+//                if(coords[k].getX() == point.getX()) /* Decide axis - Horizontal */
+//                {
+//                    if(Math.abs(coords[k].getZ() - point.getZ()) < 0.009)
+//                        c = true;
+//                }
+//                else if(coords[k].getZ() == point.getZ()) /* Decide axis - Vertical */
+//                {
+//                    if(Math.abs(coords[k].getX() - point.getX()) < 0.009)
+//                        c = true;
+//                }
+//            }
 
-            if(!c) /* If coordinate exists */
+            if(!c) /* If coordinate not exists */
             {
                 if(j != 256) /* Condition to check if memory is full */
                     j++;
@@ -58,23 +61,14 @@ public class robert
                     coords[j] = null; /* Remove array in index 256 to store latest coords */
                 }
 
-                if(!collision) /* Condition for collision nodes */
-                    i = j;
-                else
-                    i = j - 1;
-
+                i = j; /* Update i number to be current j's */
                 coords[j] = point;
             }
         }
 
         public void initBehavior()
         {
-            /* 0.014999999664723873 */
-            y = (double) Math.round(0.014999999664723873 * 1000) / 1000;
-            pointZ = new Point3d(0, y, 0);
-            coords[0] = pointZ;
-            System.out.println("init: " + coords[0]);
-            this.setWheelsVelocity(0.01, 0.01);
+            this.setWheelsVelocity(0.005, 0.005);
 
         }
         public void performBehavior()
@@ -160,6 +154,7 @@ public class robert
                 {
                     recordCoords(pointA, true);
                     System.out.println(Arrays.toString(coords));
+                    System.out.println("i: " + i + " || j: " + j);
                 }
 
                 if(xA == xB) /* Decide axis - Horizontal */
@@ -168,6 +163,8 @@ public class robert
                     {
                         recordCoords(pointA, false);
                         System.out.println(Arrays.toString(coords));
+                        System.out.println("i: " + i + " || j: " + j);
+
                     }
                 }
                 else if(zA == zB) /* Decide axis - Vertical */
@@ -176,6 +173,8 @@ public class robert
                     {
                         recordCoords(pointA, false);
                         System.out.println(Arrays.toString(coords));
+                        System.out.println("i: " + i + " || j: " + j);
+
                     }
                 }
             }
